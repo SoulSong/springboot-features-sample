@@ -54,7 +54,7 @@ public class BeanConfiguration {
     }
 
     /**
-     * Register custom validator bean for {@link ConfigurationProperties}
+     * Register customized validator bean for {@link ConfigurationProperties}
      *
      * @return Validator
      */
