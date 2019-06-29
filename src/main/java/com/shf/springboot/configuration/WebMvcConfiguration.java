@@ -1,10 +1,13 @@
 package com.shf.springboot.configuration;
 
+import com.shf.springboot.conversion.IdConversionService;
 import com.shf.springboot.conversion.IdConverter;
+import com.shf.springboot.exception.advice.DefaultWebExceptionHandling;
 import com.shf.springboot.i18n.MessageAutoConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration;
@@ -13,7 +16,8 @@ import org.springframework.boot.autoconfigure.web.servlet.error.ErrorViewResolve
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.format.FormatterRegistry;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.converter.GenericConverter;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -42,23 +46,50 @@ import java.util.Locale;
 public class WebMvcConfiguration {
 
     /**
-     * configuration for formatter and converter
+     * Configuration for customized converters, also can register converters by WebMvcConfigurer.
+     * example:
+     * <pre>
+     *     @Configuration
+     *     public static class WebConverterConfiguration implements WebMvcConfigurer {
+     *         @Autowired
+     *         private IdConverter idConverter;
+     *         @Bean
+     *         public ConversionService idConversionService() {
+     *             return new IdConversionService();
+     *         }
+     *         @Bean
+     *         public IdConverter idConverter(ConversionService idConversionService) {
+     *             return new IdConverter(idConversionService);
+     *         }
+     *         @Override
+     *         public void addFormatters(FormatterRegistry registry) {
+     *             registry.addConverter(idConverter);
+     *         }
+     *     }
+     * </pre>
      */
     @Configuration
-    public static class WebConverterConfiguration implements WebMvcConfigurer {
-        @Autowired
-        private IdConverter idConverter;
-
+    public static class ConverterConfiguration {
         /**
-         * Add custom converter into {@link FormatterRegistry} for mvc.
+         * Register customized conversion service
          *
-         * @param registry {@link FormatterRegistry}
+         * @return {@link ConversionService}
          */
-        @Override
-        public void addFormatters(FormatterRegistry registry) {
-            registry.addConverter(idConverter);
+        @Bean
+        public ConversionService idConversionService() {
+            return new IdConversionService();
         }
 
+        /**
+         * {@link IdConverter} bean depends on {@link IdConversionService}
+         *
+         * @param idConversionService idConversionService
+         * @return GenericConverter
+         */
+        @Bean
+        public GenericConverter idConverter(ConversionService idConversionService) {
+            return new IdConverter(idConversionService);
+        }
     }
 
     /**
@@ -137,13 +168,12 @@ public class WebMvcConfiguration {
             this.errorViewResolvers = errorViewResolvers;
         }
 
-//        @Bean
-//        @ConditionalOnMissingBean(value = ErrorController.class, search = SearchStrategy.CURRENT)
-//        public CustomizedErrorController basicErrorController(ErrorAttributes errorAttributes) {
-//            return new CustomizedErrorController(errorAttributes,
-//                    this.serverProperties == null ? new ErrorProperties() : this.serverProperties.getError(),
-//                    this.errorViewResolvers);
-//        }
+        @Bean
+        @ConditionalOnMissingBean
+        public DefaultWebExceptionHandling defaultWebExceptionHandling() {
+            return new DefaultWebExceptionHandling();
+        }
+
     }
 }
 
