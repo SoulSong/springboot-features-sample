@@ -151,7 +151,7 @@ public class WebMvcConfiguration {
     }
 
     /**
-     * Configuration for i18n
+     * Configuration for exception handler
      */
     @Configuration
     public static class WebErrorConfiguration implements WebMvcConfigurer {
