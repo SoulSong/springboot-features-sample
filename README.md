@@ -6,6 +6,10 @@ This is a sample to show how to integrate the features in springboot as follow:
 - [Validation](https://docs.spring.io/spring/docs/5.1.8.RELEASE/spring-framework-reference/core.html#validation-beanvalidation)
 - [@ConfigurationProperties Validation](https://docs.spring.io/spring-boot/docs/2.1.5.RELEASE/reference/htmlsingle/#boot-features-validation)
 - ExceptionHandler
+- Actuator
+  - Prometheus integration
+- Logging
+
 
 # Prepare
 There are two endpoints for encoding and decoding string with base64:
@@ -125,3 +129,44 @@ $ curl -X Get "http://localhost:8080/user?lang=en_US" -H "Content-type: applicat
     "tracking_id": "e1f5fdbc-4503-4d50-9010-ae233ea545f5"
 }
 ```
+
+## Test Logging
+Execute the command as follows:
+```bash
+$ curl http://localhost:8080/actuator/logging/foo
+hello foo
+```
+View the output in the console
+```text
+2019-06-30 02:52:25.719  INFO 21592 --- [nio-8080-exec-8] c.s.s.controller.ActuatorController      : hello foo
+2019-06-30 02:52:25.720  INFO 21592 --- [nio-8080-exec-8] c.s.s.filter.CommonRequestLoggingFilter  : remote:[0:0:0:0:0:0:0:1],uri:[/actuator/logging/foo],api:[/actuator/logging/{user_id}],http-method:[GET],spent:[3]
+```
+Here the `uri` info is different from the `api` info.
+
+## Test prometheus
+Because of setting `management.endpoints.web.base-path=/manage` in application.properties, so call the endpoint as follows:
+```bash
+$ curl http://localhost:8080/manage/prometheus
+```
+Then see that, will get the tag named `userId` of each metrics.
+```text
+.......
+# TYPE http_server_requests_seconds summary
+http_server_requests_seconds_count{method="POST",uri="/user",userId="sample_user",} 1.0
+http_server_requests_seconds_sum{method="POST",uri="/user",userId="sample_user",} 0.1326422
+http_server_requests_seconds_count{method="GET",uri="/manage/prometheus",userId="sample_user",} 1.0
+http_server_requests_seconds_sum{method="GET",uri="/manage/prometheus",userId="sample_user",} 1.2391209
+http_server_requests_seconds_count{method="GET",uri="/manage/env",userId="sample_user",} 1.0
+http_server_requests_seconds_sum{method="GET",uri="/manage/env",userId="sample_user",} 0.0398848
+http_server_requests_seconds_count{method="GET",uri="/actuator/logging/{user_id}",userId="sample_user",} 3.0
+http_server_requests_seconds_sum{method="GET",uri="/actuator/logging/{user_id}",userId="sample_user",} 0.0619368
+# HELP http_server_requests_seconds_max
+# TYPE http_server_requests_seconds_max gauge
+http_server_requests_seconds_max{method="POST",uri="/user",userId="sample_user",} 0.0
+http_server_requests_seconds_max{method="GET",uri="/manage/prometheus",userId="sample_user",} 0.0
+http_server_requests_seconds_max{method="GET",uri="/manage/env",userId="sample_user",} 0.0
+http_server_requests_seconds_max{method="GET",uri="/actuator/logging/{user_id}",userId="sample_user",} 0.0
+# HELP jvm_gc_max_data_size_bytes Max size of old generation memory pool
+.....
+``` 
+In prod, it is a very important way to monitor our services. 
