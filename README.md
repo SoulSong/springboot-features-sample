@@ -9,7 +9,8 @@ This is a sample to show how to integrate the features in springboot as follow:
 - Actuator
   - Prometheus integration
 - Logging
-
+- Properties
+  - Load external properties files by the profile setting.
 
 # Prepare
 There are two endpoints for encoding and decoding string with base64:
@@ -170,3 +171,14 @@ http_server_requests_seconds_max{method="GET",uri="/actuator/logging/{user_id}",
 .....
 ``` 
 In prod, it is a very important way to monitor our services. 
+
+
+## Test properties
+Need to add a program argument as `--spring.profiles.active=qa` or `--spring.profiles.active=ci`.
+Then will see the output in console like,
+```text
+2019-06-30 03:17:56.823  INFO 18964 --- [           main] com.shf.springboot.SampleApplication     : The following profiles are active: qa
+......
+2019-06-30 03:17:58.898  INFO 18964 --- [           main] c.s.s.c.PropertiesConfiguration          : current profile is qa, load from custom-qa.properties.
+```
+See more in [PropertiesConfiguration](./src/main/java/com/shf/springboot/configuration/PropertiesConfiguration.java)
