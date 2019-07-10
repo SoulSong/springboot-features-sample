@@ -11,6 +11,7 @@ This is a sample to show how to integrate the features in springboot as follow:
 - Logging
 - Properties
   - Load external properties files by the profile setting.
+- Event
 
 # Prepare
 There are two endpoints for encoding and decoding string with base64:
@@ -182,3 +183,35 @@ Then will see the output in console like,
 2019-06-30 03:17:58.898  INFO 18964 --- [           main] c.s.s.c.PropertiesConfiguration          : current profile is qa, load from custom-qa.properties.
 ```
 See more in [PropertiesConfiguration](./src/main/java/com/shf/springboot/configuration/PropertiesConfiguration.java)
+
+
+## Test event
+Something useful is describe in official document:
+> You can register as many event listeners as you wish, but note that, by default, event listeners receive events synchronously. 
+This means that the publishEvent() method blocks until all listeners have finished processing the event. One advantage of this 
+synchronous and single-threaded approach is that, when a listener receives an event, it operates inside the transaction context 
+of the publisher if a transaction context is available. If another strategy for event publication becomes necessary, See the 
+javadoc for Spring’s ApplicationEventMulticaster interface.
+
+Here will show some samples to explain it. 
+
+- Support genera [GeneralEvent](./src/main/java/com/shf/springboot/event/GeneralEvent.java) and [GeneralEventPublisher](./src/main/java/com/shf/springboot/event/GeneralEventPublisher.java)
+> In most scenarios, we can publish any events by GeneralEventPublisher and GeneralEvent. 
+Do not need to define other events and publishers. Just need to define different payloads(subjects) for different events.
+
+- Support order listener
+> See more in `com.shf.springboot.event.order` package. The listeners will execute one by one in low to large order.
+
+- Support condition listener
+> See more in `com.shf.springboot.event.order` package. The event SpEL description can forward to `https://docs.spring.io/spring/docs/5.1.8.RELEASE/spring-framework-reference/core.html#context-functionality-events-annotation`
+
+- Support synchronous and asynchronous listeners
+> See more in `com.shf.springboot.event.sync` and `com.shf.springboot.event.async`. Synchronous listeners is default. The publisher and listener run in the same thread. So it supports transaction and so on.
+If you want a particular listener to process events asynchronously, 
+we need to use **@Async** to embellish the listener. 
+At the same time, don't forget to add the **@EnableAsync** annotation.
+If you need to use the customized `Executor` and customized `AsyncUncaughtExceptionHandler` for `@Async` task, only need to implement `AsyncConfigurer`.
+
+**Note**
+>In this subject, you can try unit test to check them.
+
