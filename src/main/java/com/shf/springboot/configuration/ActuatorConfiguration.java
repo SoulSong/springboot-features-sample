@@ -33,7 +33,7 @@ public class ActuatorConfiguration {
         CommonRequestLoggingFilter filter = new CommonRequestLoggingFilter();
         filter.setIncludeClientInfo(true);
         filter.setIncludeQueryString(true);
-        FilterRegistrationBean<CommonRequestLoggingFilter> filterRegistrationBean = new FilterRegistrationBean(filter);
+        FilterRegistrationBean<CommonRequestLoggingFilter> filterRegistrationBean = new FilterRegistrationBean<>(filter);
         filterRegistrationBean.setUrlPatterns(Collections.singleton("/actuator/*"));
         return filterRegistrationBean;
     }

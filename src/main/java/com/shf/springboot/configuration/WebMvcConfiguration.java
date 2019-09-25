@@ -4,6 +4,9 @@ import com.shf.springboot.conversion.IdConversionService;
 import com.shf.springboot.conversion.IdConverter;
 import com.shf.springboot.exception.advice.DefaultWebExceptionHandling;
 import com.shf.springboot.i18n.MessageAutoConfiguration;
+import com.shf.springboot.web.provider.ApplicationContextProvider;
+import com.shf.springboot.web.provider.EnvironmentProvider;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
@@ -148,6 +151,17 @@ public class WebMvcConfiguration {
         public void addViewControllers(ViewControllerRegistry registry) {
             registry.addStatusController("/ping", HttpStatus.OK);
         }
+
+        @Bean
+        public static EnvironmentProvider environmentProvider() {
+            return new EnvironmentProvider();
+        }
+
+        @Bean
+        public static ApplicationContextProvider applicationContextProvider() {
+            return new ApplicationContextProvider();
+        }
+
     }
 
     /**
