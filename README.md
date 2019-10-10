@@ -12,6 +12,11 @@ This is a sample to show how to integrate the features in springboot as follow:
 - Properties
   - Load external properties files by the profile setting.
 - Event
+- Environment and ApplicationContext
+- RestTemplate
+- Task
+   - Scheduler
+   - Task decorator
 
 # Prepare
 There are two endpoints for encoding and decoding string with base64:
