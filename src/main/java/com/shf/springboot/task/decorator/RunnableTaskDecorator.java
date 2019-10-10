@@ -6,6 +6,7 @@ package com.shf.springboot.task.decorator;
  * @author: songhaifeng
  * @date: 2019/10/8 13:41
  */
+@FunctionalInterface
 public interface RunnableTaskDecorator {
 
     /**

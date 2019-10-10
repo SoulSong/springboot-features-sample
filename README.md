@@ -220,3 +220,58 @@ If you need to use the customized `Executor` and customized `AsyncUncaughtExcept
 **Note**
 >In this subject, you can try unit test to check them.
 
+# Test Environment and ApplicationContext
+See more in [ApplicationContextProviderTest](./src/test/java/com/shf/springboot/web/provider/ApplicationContextProviderTest.java) and 
+[EnvironmentProviderTest](./src/test/java/com/shf/springboot/web/provider/EnvironmentProviderTest.java).
+
+# Test Customized RestTemplate
+Add [RestTemplateProperties](./src/main/java/com/shf/springboot/resttemplate/RestTemplateProperties.java) for config restTemplate.
+Also add [LoggingClientHttpRequestInterceptor](./src/main/java/com/shf/springboot/resttemplate/LoggingClientHttpRequestInterceptor.java) 
+and [LoggingResponseErrorHandler](./src/main/java/com/shf/springboot/resttemplate/LoggingResponseErrorHandler.java) for logging before sending request and handling error info from response.
+
+See more in [RestTemplateTest](./src/test/java/com/shf/springboot/resttemplate/RestTemplateTest.java).
+
+# Test Task
+## Test scheduler
+Customized the thread pool size for scheduler task. Configuration in [CustomizeSchedulingConfigurer](./src/main/java/com/shf/springboot/task/CustomizeSchedulingConfigurer.java).
+Here i defined two [task workers](./src/main/java/com/shf/springboot/task/TaskScheduleWorker.java), 
+they need to run at the same time. So start the application and watch the log as follows:
+```text
+2019-10-15 14:08:59.001  INFO 1700 --- [schedule-pool-0] c.s.springboot.task.TaskScheduleWorker   : work2
+2019-10-15 14:08:59.001  INFO 1700 --- [schedule-pool-1] c.s.springboot.task.TaskScheduleWorker   : work1
+```
+
+## Test async task
+Copy the thead context from the main thread_executor to the sub thead_executors with **TaskDecorator**. 
+Here i example the [mdc](./src/main/java/com/shf/springboot/task/decorator/MdcTaskDecorator.java) and [request_attribute](./src/main/java/com/shf/springboot/task/decorator/RequestAttributesTaskDecorator.java) decorators for you.
+I also mock some user_data [MdcFilter](./src/main/java/com/shf/springboot/task/filter/MdcFilter.java) and [RequestAttributesFilter](./src/main/java/com/shf/springboot/task/filter/RequestAttributesFilter.java).
+At last, I will log the mdc data and request_attributes in the sub thread pool executor.
+
+Some test cases are defined in [AsyncTaskController](./src/main/java/com/shf/springboot/controller/AsyncTaskController.java)
+
+- case 1 : Test for the default executor with @Async annotation
+```bash
+$ curl http://localhost:8080/task1
+```
+**OUTPUT**
+```text
+[ext-decorator-1] c.s.s.t.s.impl.ContextLoggerServiceImpl  : executorThreadId: 65; ContextMap on execution: {userId=674fd359-0b32-4dbd-84d1-57d3492f8638}; Request from on execution: abc
+```
+
+- case 2 : Test for the customized executor with @Async annotation
+```bash
+$ curl http://localhost:8080/task2
+```
+**OUTPUT**
+```text
+[stomized-pool-1] c.s.s.t.s.impl.ContextLoggerServiceImpl  : executorThreadId: 66; ContextMap on execution: {userId=65765836-2d76-4ba4-9700-179180f44e92}; Request from on execution: abc
+```
+
+- case 3 : Test for the customized executor to execute the callable manually.
+```bash
+$ curl http://localhost:8080/task3
+```
+**OUTPUT**
+```text
+[stomized-pool-2] c.s.s.t.s.impl.ContextLoggerServiceImpl  : executorThreadId: 67; ContextMap on execution: {userId=8dcf8b8d-02be-4d11-88a5-47a5e6a7619d}; Request from on execution: abc
+```
