@@ -13,9 +13,9 @@ import java.util.Iterator;
  * @date: 2019/10/8 13:36
  */
 public class AsyncTaskDecorator implements TaskDecorator {
-    private final Collection<RunnableTaskDecorator> decorators;
+    private final Collection<ThreadTaskDecorator> decorators;
 
-    public AsyncTaskDecorator(Collection<RunnableTaskDecorator> decorators) {
+    public AsyncTaskDecorator(Collection<ThreadTaskDecorator> decorators) {
         this.decorators = decorators;
     }
 
@@ -25,10 +25,10 @@ public class AsyncTaskDecorator implements TaskDecorator {
     }
 
     private final class AsyncTaskDecoratorChain {
-        private final Iterator<RunnableTaskDecorator> decorators;
+        private final Iterator<ThreadTaskDecorator> decorators;
         private final Runnable runnable;
 
-        AsyncTaskDecoratorChain(Iterator<RunnableTaskDecorator> decorators, Runnable runnable) {
+        AsyncTaskDecoratorChain(Iterator<ThreadTaskDecorator> decorators, Runnable runnable) {
             this.decorators = decorators;
             this.runnable = runnable;
         }

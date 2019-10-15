@@ -3,7 +3,9 @@ package com.shf.springboot.task;
 import com.shf.springboot.task.decorator.AsyncTaskDecorator;
 import com.shf.springboot.task.decorator.MdcTaskDecorator;
 import com.shf.springboot.task.decorator.RequestAttributesTaskDecorator;
-import com.shf.springboot.task.decorator.RunnableTaskDecorator;
+import com.shf.springboot.task.decorator.ThreadTaskDecorator;
+import com.shf.springboot.task.executor.ThreadPoolExecutorProperty;
+import com.shf.springboot.task.executor.ThreadPoolTaskExecutorBuilder;
 import com.shf.springboot.task.filter.MdcFilter;
 import com.shf.springboot.task.filter.RequestAttributesFilter;
 
@@ -33,15 +35,15 @@ public class CustomizedAsyncConfigurerSupport extends AsyncConfigurerSupport {
     public static final String CUSTOMIZED_TASK_EXECUTOR = "customizedTaskExecutor";
 
     @Autowired(required = false)
-    private List<RunnableTaskDecorator> decoratorList = new ArrayList<>();
+    private List<ThreadTaskDecorator> decoratorList = new ArrayList<>();
 
     @Bean
-    public RunnableTaskDecorator mdcTaskDecorator() {
+    public ThreadTaskDecorator mdcTaskDecorator() {
         return new MdcTaskDecorator();
     }
 
     @Bean
-    public RunnableTaskDecorator requestAttributesTaskDecorator() {
+    public ThreadTaskDecorator requestAttributesTaskDecorator() {
         return new RequestAttributesTaskDecorator();
     }
 
@@ -86,4 +88,19 @@ public class CustomizedAsyncConfigurerSupport extends AsyncConfigurerSupport {
         return executor;
     }
 
+    /*************************create thread pool with builder****************************/
+    public static final String THREAD_POOL_NAME = "customized-pool2";
+
+    @Bean
+    public ThreadPoolTaskExecutorBuilder threadPoolTaskExecutorBuilder() {
+        return new ThreadPoolTaskExecutorBuilder(decoratorList);
+    }
+
+    @Bean(THREAD_POOL_NAME)
+    public ThreadPoolTaskExecutor customizedTaskExecutor2(ThreadPoolTaskExecutorBuilder threadPoolTaskExecutorBuilder) {
+        return threadPoolTaskExecutorBuilder.build(new ThreadPoolExecutorProperty()
+                .setCorePoolSize(3)
+                .setMaxPoolSize(3)
+                .setThreadName(THREAD_POOL_NAME));
+    }
 }

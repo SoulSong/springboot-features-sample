@@ -12,7 +12,7 @@ import java.util.Map;
  * @author: songhaifeng
  * @date: 2019/10/8 13:40
  */
-public final class MdcTaskDecorator implements RunnableTaskDecorator {
+public final class MdcTaskDecorator implements ThreadTaskDecorator {
 
     @Override
     public Runnable decorator(Runnable runnable) {

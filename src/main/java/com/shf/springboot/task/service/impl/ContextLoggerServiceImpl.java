@@ -16,6 +16,7 @@ import java.util.concurrent.Future;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.shf.springboot.task.CustomizedAsyncConfigurerSupport.CUSTOMIZED_TASK_EXECUTOR;
+import static com.shf.springboot.task.CustomizedAsyncConfigurerSupport.THREAD_POOL_NAME;
 
 /**
  * Description:
@@ -30,6 +31,10 @@ public class ContextLoggerServiceImpl implements ContextLoggerService {
     @Qualifier(CUSTOMIZED_TASK_EXECUTOR)
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
+    @Autowired
+    @Qualifier(THREAD_POOL_NAME)
+    private ThreadPoolTaskExecutor threadPoolTaskExecutor2;
+
     @Override
     public void logContext1() {
         logContext();
@@ -43,6 +48,14 @@ public class ContextLoggerServiceImpl implements ContextLoggerService {
     @Override
     public Future<String> logContext3() {
         return threadPoolTaskExecutor.submit(() -> {
+            logContext();
+            return "OK";
+        });
+    }
+
+    @Override
+    public Future<String> logContext4() {
+        return threadPoolTaskExecutor2.submit(() -> {
             logContext();
             return "OK";
         });

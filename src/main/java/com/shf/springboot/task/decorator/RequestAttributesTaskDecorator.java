@@ -10,7 +10,7 @@ import org.springframework.web.context.request.RequestContextHolder;
  * @author: songhaifeng
  * @date: 2019/10/8 13:44
  */
-public final class RequestAttributesTaskDecorator implements RunnableTaskDecorator {
+public final class RequestAttributesTaskDecorator implements ThreadTaskDecorator {
     @Override
     public Runnable decorator(Runnable runnable) {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();

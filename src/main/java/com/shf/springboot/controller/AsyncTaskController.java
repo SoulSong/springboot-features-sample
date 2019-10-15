@@ -1,5 +1,6 @@
 package com.shf.springboot.controller;
 
+import com.shf.springboot.task.executor.ThreadPoolTaskExecutorBuilder;
 import com.shf.springboot.task.service.ContextLoggerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +51,15 @@ public class AsyncTaskController {
     @GetMapping(value = "task3")
     public String task3() throws ExecutionException, InterruptedException {
         return contextLoggerService.logContext3().get();
+    }
+
+    /**
+     * Test for the customized executor which is created by the customized {@link ThreadPoolTaskExecutorBuilder}.
+     *
+     * @return String
+     */
+    @GetMapping(value = "task4")
+    public String task4() throws ExecutionException, InterruptedException {
+        return contextLoggerService.logContext4().get();
     }
 }

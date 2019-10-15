@@ -30,4 +30,10 @@ public interface ContextLoggerService {
      * log context manually
      */
     Future<String> logContext3();
+
+    /**
+     * log context with another customized executor.
+     */
+    Future<String> logContext4();
+
 }
