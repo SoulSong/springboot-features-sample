@@ -36,4 +36,9 @@ public interface ContextLoggerService {
      */
     Future<String> logContext4();
 
+    /**
+     * log context with CompletableFuture.
+     */
+    Future<String> logContext5();
+
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -61,5 +62,16 @@ public class AsyncTaskController {
     @GetMapping(value = "task4")
     public String task4() throws ExecutionException, InterruptedException {
         return contextLoggerService.logContext4().get();
+    }
+
+    /**
+     * Test for the customized executor which is created by the customized {@link ThreadPoolTaskExecutorBuilder}
+     * and submit by {@link CompletableFuture}.
+     *
+     * @return String
+     */
+    @GetMapping(value = "task5")
+    public String task5() throws ExecutionException, InterruptedException {
+        return contextLoggerService.logContext5().get();
     }
 }

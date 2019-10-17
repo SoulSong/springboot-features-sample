@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 import lombok.extern.slf4j.Slf4j;
@@ -59,6 +60,14 @@ public class ContextLoggerServiceImpl implements ContextLoggerService {
             logContext();
             return "OK";
         });
+    }
+
+    @Override
+    public Future<String> logContext5() {
+        return CompletableFuture.supplyAsync(() -> {
+            logContext();
+            return "ok";
+        }, threadPoolTaskExecutor2);
     }
 
     private void logContext() {

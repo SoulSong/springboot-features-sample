@@ -279,7 +279,7 @@ $ curl http://localhost:8080/task3
 > If you want to mask implementation thread pool build details. You can use the [ThreadPoolTaskExecutorBuilder](./src/main/java/com/shf/springboot/task/executor/ThreadPoolTaskExecutorBuilder.java) to create
 a thread-pool. It will help you to throughout the thread-context. Test with case 4:
 
-- case 4: Test for the customized executor which is created by the customized ThreadPoolTaskExecutorBuilder.
+- case 4 : Test for the customized executor which is created by the customized ThreadPoolTaskExecutorBuilder.
 ```bash
 $ curl http://localhost:8080/task4
 ```
@@ -288,3 +288,12 @@ $ curl http://localhost:8080/task4
 [tomized-pool2-1] c.s.s.t.s.impl.ContextLoggerServiceImpl  : executorThreadId: 75; ContextMap on execution: {userId=d7ab1834-9bb8-43f3-82fb-79652a302c15}; Request from on execution: abc
 ```
 > Notice the thread-pool name.
+
+- case 5 : Test for the customized executor which is created by the customized ThreadPoolTaskExecutorBuilder and submit by CompletableFuture.
+```bash
+$ curl http://localhost:8080/task5
+```
+**OUTPUT**
+```text
+[tomized-pool2-1] c.s.s.t.s.impl.ContextLoggerServiceImpl  : executorThreadId: 66; ContextMap on execution: {userId=c43bcb43-9b86-4bfc-b0a2-238c4218b6b0}; Request from on execution: abc
+```
