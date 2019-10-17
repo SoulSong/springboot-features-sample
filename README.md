@@ -275,8 +275,8 @@ $ curl http://localhost:8080/task3
 ```text
 [stomized-pool-2] c.s.s.t.s.impl.ContextLoggerServiceImpl  : executorThreadId: 67; ContextMap on execution: {userId=8dcf8b8d-02be-4d11-88a5-47a5e6a7619d}; Request from on execution: abc
 ```
-### ThreadPoolTaskExecutorBuilder
-If you want to mask implementation thread pool build details. You can use the [ThreadPoolTaskExecutorBuilder](./src/main/java/com/shf/springboot/task/executor/ThreadPoolTaskExecutorBuilder.java) to create
+
+> If you want to mask implementation thread pool build details. You can use the [ThreadPoolTaskExecutorBuilder](./src/main/java/com/shf/springboot/task/executor/ThreadPoolTaskExecutorBuilder.java) to create
 a thread-pool. It will help you to throughout the thread-context. Test with case 4:
 
 - case 4: Test for the customized executor which is created by the customized ThreadPoolTaskExecutorBuilder.
@@ -287,4 +287,4 @@ $ curl http://localhost:8080/task4
 ```text
 [tomized-pool2-1] c.s.s.t.s.impl.ContextLoggerServiceImpl  : executorThreadId: 75; ContextMap on execution: {userId=d7ab1834-9bb8-43f3-82fb-79652a302c15}; Request from on execution: abc
 ```
-Notice the thread-pool name.
+> Notice the thread-pool name.
