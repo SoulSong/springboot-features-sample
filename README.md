@@ -17,6 +17,7 @@ This is a sample to show how to integrate the features in springboot as follow:
 - Task
    - Scheduler
    - Task decorator
+- Generator configuration metadata 
 
 # Prepare
 There are two endpoints for encoding and decoding string with base64:
@@ -297,3 +298,8 @@ $ curl http://localhost:8080/task5
 ```text
 [tomized-pool2-1] c.s.s.t.s.impl.ContextLoggerServiceImpl  : executorThreadId: 66; ContextMap on execution: {userId=c43bcb43-9b86-4bfc-b0a2-238c4218b6b0}; Request from on execution: abc
 ```
+
+# Generator configuration metadata 
+In order to generate this configuration metadata, we’ll use the configuration processor from the `spring-boot-configuration-processor` dependency. 
+Then after compiling our project, we'll see a file called `spring-configuration-metadata.json` inside `target/classes/META-INF`:  
+
