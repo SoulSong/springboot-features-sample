@@ -8,6 +8,7 @@ import com.shf.springboot.serializer.IdSerializer;
 import com.shf.springboot.validator.BaseEntityValid;
 import com.shf.springboot.validator.EmailValid;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -24,6 +25,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @BaseEntityValid
+@Builder
 public class User extends BaseEntity {
     @NotNull
     private String id;

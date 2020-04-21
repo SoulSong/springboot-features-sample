@@ -55,7 +55,7 @@ public interface MethodArgumentNotValidExceptionAdviceTrait extends ExceptionAdv
             fields.put(violation.getFieldName(), violation);
         }
 
-        ValidationException ex = new ValidationException(fields);
+        ValidationException ex = new ValidationException(exception, fields);
         return handle(request, response, ResponseEntity.status(ex.getStatusCode()).body(new ValidationErrorEntity(ex)));
     }
 

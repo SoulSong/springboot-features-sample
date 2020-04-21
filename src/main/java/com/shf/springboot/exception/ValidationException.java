@@ -23,8 +23,8 @@ public class ValidationException extends ApplicationException {
     private static final String DEFAULT_VALIDATION_EXCEPTION_ERROR_MESSAGE = "Validation failed.";
     private final Map<String, FieldValidationFailure> validationFailures = new HashMap<>();
 
-    public ValidationException(Map<String, FieldValidationFailure> fieldValidationFailures) {
-        super(DEFAULT_VALIDATION_EXCEPTION_STATUS_CODE, VALIDATION_ERROR_CODE, DEFAULT_VALIDATION_EXCEPTION_ERROR_MESSAGE);
+    public ValidationException(Exception e, Map<String, FieldValidationFailure> fieldValidationFailures) {
+        super(e, DEFAULT_VALIDATION_EXCEPTION_STATUS_CODE, VALIDATION_ERROR_CODE, DEFAULT_VALIDATION_EXCEPTION_ERROR_MESSAGE);
         if (fieldValidationFailures != null) {
             this.validationFailures.putAll(fieldValidationFailures);
         }

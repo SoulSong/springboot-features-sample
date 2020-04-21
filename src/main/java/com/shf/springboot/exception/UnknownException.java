@@ -13,8 +13,8 @@ public class UnknownException extends ApplicationException {
 
     private String trackingId;
 
-    public UnknownException(UnknownErrorEntity errorEntity) {
-        super(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorEntity.getBizErrorCode(), errorEntity.getErrorMessage());
+    public UnknownException(Exception e, UnknownErrorEntity errorEntity) {
+        super(e, HttpStatus.INTERNAL_SERVER_ERROR.value(), errorEntity.getBizErrorCode(), errorEntity.getErrorMessage());
         this.setTrackingId(errorEntity.getTrackingId());
     }
 

@@ -24,16 +24,16 @@ public abstract class ApplicationException extends AbstractException {
     private final int bizErrorCode;
     private DateTime timestamp;
 
-    protected ApplicationException() {
-        this(DEFAULT_APPLICATION_EXCEPTION_STATUS_CODE, DEFAULT_ERROR_CODE, DEFAULT_APPLICATION_EXCEPTION_ERROR_MESSAGE);
+    protected ApplicationException(Exception e) {
+        this(e, DEFAULT_APPLICATION_EXCEPTION_STATUS_CODE, DEFAULT_ERROR_CODE, DEFAULT_APPLICATION_EXCEPTION_ERROR_MESSAGE);
     }
 
-    protected ApplicationException(String pattern, Object... args) {
-        this(DEFAULT_APPLICATION_EXCEPTION_STATUS_CODE, DEFAULT_ERROR_CODE, DEFAULT_APPLICATION_EXCEPTION_ERROR_MESSAGE, pattern, args);
+    protected ApplicationException(Exception e, String pattern, Object... args) {
+        this(e, DEFAULT_APPLICATION_EXCEPTION_STATUS_CODE, DEFAULT_ERROR_CODE, DEFAULT_APPLICATION_EXCEPTION_ERROR_MESSAGE, pattern, args);
     }
 
-    protected ApplicationException(int status, int bizErrorCode, String pattern, Object... args) {
-        super(pattern, args);
+    protected ApplicationException(Exception e, int status, int bizErrorCode, String pattern, Object... args) {
+        super(e, pattern, args);
         this.statusCode = status;
         this.bizErrorCode = bizErrorCode;
         this.timestamp = DateTime.now(DateTimeZone.UTC);
