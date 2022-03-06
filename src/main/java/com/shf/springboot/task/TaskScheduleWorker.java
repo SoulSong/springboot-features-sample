@@ -1,5 +1,6 @@
 package com.shf.springboot.task;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Configuration
 @EnableScheduling
 @Slf4j
+@ConditionalOnProperty(name = "schedule.enable",havingValue = "true",matchIfMissing = false)
 public class TaskScheduleWorker {
 
     /**
@@ -32,6 +34,4 @@ public class TaskScheduleWorker {
     public void work2() {
         log.info("work2");
     }
-
-
 }

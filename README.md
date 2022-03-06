@@ -18,6 +18,7 @@ This is a sample to show how to integrate the features in springboot as follow:
    - Scheduler
    - Task decorator
 - Generator configuration metadata 
+- Client dynamic route
 
 # Prepare
 There are two endpoints for encoding and decoding string with base64:
@@ -297,6 +298,25 @@ $ curl http://localhost:8080/task5
 **OUTPUT**
 ```text
 [tomized-pool2-1] c.s.s.t.s.impl.ContextLoggerServiceImpl  : executorThreadId: 66; ContextMap on execution: {userId=c43bcb43-9b86-4bfc-b0a2-238c4218b6b0}; Request from on execution: abc
+```
+
+## Test Client Dynamic Route
+See more in [ReconstructURIClientHttpRequestInterceptor](./src/main/java/com/shf/springboot/resttemplate/ReconstructURIClientHttpRequestInterceptor.java)
+###Origin Route
+```bash
+$ curl http://localhost:8080/route/mock/origin
+```
+**OUTPUT**
+```text
+origin
+```
+###Grey Route
+```bash
+$ curl http://localhost:8080/route/mock/grey
+```
+**OUTPUT**
+```text
+grey
 ```
 
 # Generator configuration metadata 
